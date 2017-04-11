@@ -12,4 +12,4 @@ cd ~/Physics535
 
 source environment.sh
 
-Then look at README file for further instructions
+Then look at README files in individual exercise directories for further instructions
