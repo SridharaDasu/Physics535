@@ -1,13 +1,13 @@
 CXX           = g++
-CXXFLAGS      = $(OPT2) -pipe -Wall -W -Woverloaded-virtual -g 
+CXXFLAGS      = $(OPT2) -pipe -Wall -W -Woverloaded-virtual -g -std=c++11
 LD            = g++
 LDFLAGS       = $(OPT2)
 SOFLAGS       = -dynamiclib -single_module -undefined $(UNDEFOPT)
 
-PYINCLUDES = -I$(PYTHIA8DATA)/../include
-PYLDLIBS = -L$(PYTHIA8DATA)/../lib -lpythia8 -llhapdfdummy
+PYINCLUDES = -I$(PYTHIA8DATA)/../../../include
+PYLDLIBS = -L$(PYTHIA8DATA)/../../../lib -lpythia8 -lpythia8lhapdf6
 
-FASTJET=$(PYTHIA8DATA)/../../../fastjet/3.0.3-cms/
+FASTJET=$(PYTHIA8DATA)/../../../../../fastjet/3.1.0/
 FASTJETINCLUDES = -I$(FASTJET)/include
 FASTJETLDLIBS = -L$(FASTJET)/lib/ -lfastjet
 

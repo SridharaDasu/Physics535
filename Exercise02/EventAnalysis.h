@@ -6,7 +6,7 @@
 
 using namespace std;
 
-#include "Pythia.h"
+#include "Pythia8/Pythia.h"
 using namespace Pythia8; 
 
 class TH1F;
