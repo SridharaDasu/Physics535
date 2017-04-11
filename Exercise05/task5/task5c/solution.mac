@@ -1,0 +1,43 @@
+  #
+  # define scoring mesh 
+  #
+  /score/create/boxMesh boxMesh_1
+  #
+  /score/mesh/boxSize 25. 25. 25. cm
+  /score/mesh/nBin 30 30 30
+  #
+  # define scorers
+  #
+  /score/quantity/energyDeposit eDep
+  /score/quantity/passageCellCurrent totalCurrent 1
+  /score/quantity/passageCellCurrent epCurrent 1
+  /score/filter/particle epFilter e- e+
+  #
+  /score/close
+  #
+  /score/list
+  #
+  /run/beamOn 20
+  #
+
+  /vis/viewer/set/targetPoint 0 0 0 cm 
+  /vis/viewer/zoom 4
+  /vis/viewer/flush
+  #
+  /score/drawProjection boxMesh_1 eDep
+  #
+  /score/drawProjection boxMesh_1 totalCurrent logColorMap
+  #
+  /score/drawProjection boxMesh_1 epCurrent logColorMap
+  #
+  # sliced views
+  #
+  /vis/scene/create
+  /vis/sceneHandler/attach scene-1
+  /vis/viewer/set/viewpointThetaPhi 100 160 deg
+ /vis/viewer/flush
+#
+/control/loop drawSlice.mac iColumn 0 29 7
+#
+/score/dumpQuantityToFile boxMesh_1 eDep eDep.data
+

@@ -1,0 +1,12 @@
+Login to your account on HEP cluster using the account provided:
+
+ssh login.hep.wisc.edu
+
+Everytime you login do the following:
+
+cd ~/Physics535
+source environment.sh
+
+cd Exercise00
+
+Follow remaining instructions in the DDecayKinematics.C

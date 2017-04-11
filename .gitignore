@@ -1,0 +1,10 @@
+*~
+*.o
+*.a
+*.so
+*.pyc
+*.dSYM
+*.root
+generateData
+analyzeData
+a.out

@@ -1,0 +1,192 @@
+
+/**
+ \mainpage Task 1.a Geant4 Materials
+
+\section t1as1 OBJECTIVE
+
+Learn how to create and use a material.
+This Geant4 example contains the description of a typical detector composed by a set of three silicon microstrip detectors and a final electromagnetic calorimeter. The silicon planes act as a tracker giving the possibility to determine the particle track and vertex. The calorimeter measures the final particle energy.
+
+\section t1as2 HOW
+
+In this exercise you will be asked to create the material used for the electromagnetic calorimeter of the exercise: 
+PbWO4 (lead tungstate).
+
+The relevant method to look at is in DetectorConstruction::DefineMaterials()
+
+Look at the code there in file src/DetectorConstruction.cc you will notice that the G4Material* pointer called pbwo4 is not instantiated.
+  
+The line 
+\verbatim
+G4cout<<*(G4Material::GetMaterialTable()) << G4endl;
+\endverbatim
+
+added at the end of the functions prints the list of known materials.
+
+\section t1as3a PRACTICE
+
+Download from the following web site the tarball with the exercises:
+\verbatim
+http://geant4.lngs.infn.it/courseBelfast2013/code/task1.tar
+\endverbatim
+
+Copy it in your 'geant4-exercises' working directory, unpack it:
+\verbatim
+        % cd geant4-exercises
+	% tar -xf task1.tar    
+\endverbatim
+
+
+Inside the geant4-exercises directory you can create a sub-directory named "task1a-build":
+
+\verbatim
+% mkdir task1a-build
+\endverbatim
+
+Enters into the newly created folder:
+
+\verbatim
+% cd task1a-build
+\endverbatim
+and run the command cmake:
+\verbatim
+% cmake -DGeant4_DIR=/usr/local/geant4.9.6/geant4.9.6-install/lib/Geant4-9.6.0 [task1a_directory]
+\endverbatim
+
+To compile, simply execute "make" in the build directory:
+\verbatim
+% make
+\endverbatim
+The build will now run, and will output information on the progress of the build and current operations.
+This will create an executable file "task1a" that you can run in this way:
+\verbatim
+% ./task1a materials.mac
+\endverbatim
+
+Notice that the program will exit with an error code if exercise 1a.1 is not correctly completed.
+
+\subsection  t1as3asub1 Exercise 1a.1 : Create a material starting from elements
+To create a material from constituent elements you need first to define elements that will build the material.
+
+See in DetectorConstruction::DefineMaterials() how oxygen is created. Add the other needed elements: 
+Lead (Pb, Z=82, a=207.20 g/mole) and Tungsten (W, Z=74, a=183.84 g/mole).
+
+You can now create PbWO4 and add the elements in the correct number respecting the material chemical formula. The 
+density of PbWO4 is 8.280 g/cm<sup>3</sup>;
+
+To add an element to a material use G4Material::AddElement( G4Element*, G4int numAtoms) method.
+For example to add one atom of Pb:
+\verbatim
+    pbwo4 = new G4Material("PbWO4",//name
+                           density,//density
+                           3);//number of elements
+    pbwo4->AddElement(elPb,1);
+\endverbatim
+
+compile and run the application.
+
+- What are the defined materials?
+- Check that PbWO4 is created with the correct recipe.
+
+\subsection  t1as3asub2 Exercise 1a.2 : Create the same material with NIST manager
+
+Now we use the NIST manager and use the same material defined in NIST.
+
+Now change the instance of pbwo4. Modify it to use the NIST manager. You should copy from another 
+pre-defined material (for example from the tracker materials).
+
+\verbatim
+    pbwo4 = .....
+\endverbatim
+
+Hint: The NIST lead tungstate material is called: G4_PbWO4
+
+Recompile and run the application.
+
+- What is the difference with the material defined in previous example?
+
+\subsection t1as3asub2bis Exercise 1a.3 : Create a material starting from isotopes
+
+In Geant4 it is possible to define an element with an isotopic composition different 
+from the natural one. 
+
+In this exercise define the following G4Isotopes (stable isotopes of germanium) in  DetectorConstruction::DefineMaterials(). 
+Then define a G4Element, which is germanium enriched in Ge-76. 
+To build up an element starting from G4Isotope pointers, you may use the method 
+G4Element::AddIsotope()
+
+\verbatim
+Ge-72: Z=32, A=72, atomic mass=71.92 g/mole, isotopic abundance = 0.1%
+Ge-73: Z=32, A=73, atomic mass=73.0  g/mole, isotopic abundance = 0.2%
+Ge-74: Z=32, A=74, atomic mass=74.0  g/mole, isotopic abundance = 13.1%
+Ge-76: Z=32, A=76, atomic mass=76.0  g/mole, isotopic abundance = 86.6%
+\endverbatim
+
+Finally, define a G4Material, as metallic germaniumm with density=5.35 g/cm3. 
+This material is used for neutrinoless double-beta decay experiments.
+
+The G4Material defined here will <b>not</b> be used in the following, is created
+just to show how to build an element from isotopes.
+
+
+\section t1as4 SOLUTION
+
+\subsection t1as4sub1 Exercise 1a.1 : Create a material starting from elements
+Here it is:
+First build the missing elements
+\verbatim
+   a=183.84*g/mole;
+   G4Element* elW = new G4Element("Tungsten","W",74,a);
+   
+   a=207.20*g/mole;
+   G4Element* elPb = new G4Element("Lead","Pb",82,a);                                
+\endverbatim
+and then the material
+\verbatim
+    G4double density = 8.280*g/cm3;
+    pbwo4 = new G4Material("PbWO4",//name
+                           density,//density
+                           3);//number of elements
+    pbwo4->AddElement(elPb,1);
+    pbwo4->AddElement(elW,1);
+    pbwo4->AddElement(elO,4);
+\endverbatim
+
+\subsection  t1as4asub2 Exercise 1a.2 : Create the same material with NIST manager
+\verbatim
+pbwo4 = man->FindOrBuildMaterial("G4_PbWO4");
+\endverbatim
+
+
+\subsection t1as4sub3 Exercise 1a.3 : Create a material starting from isotopes
+
+Edit the method DetectorConstruction::DefineMaterials() as
+\verbatim
+  G4String name,symbol;
+  G4double abundance,density;
+  G4int nIsotopes,natoms;
+   
+  //Define isotopes
+  G4Isotope* Ge72 = new G4Isotope(name="Ge72",  32, 72, 71.92*g/mole);
+  G4Isotope* Ge73 = new G4Isotope(name="Ge73",  32, 73, 73.0*g/mole);
+  G4Isotope* Ge74 = new G4Isotope(name="Ge74",  32, 74, 74.0*g/mole);
+  G4Isotope* Ge76 = new G4Isotope(name="Ge76",  32, 76, 76.0*g/mole);
+   
+  //Define element from isotopes
+  G4Element* elGeEnr = new G4Element(name="enrichedGermanium",
+                                     symbol="GeEnr",nIsotopes=4);
+  elGeEnr->AddIsotope(Ge72,abundance= 0.1*perCent);
+  elGeEnr->AddIsotope(Ge73,abundance= 0.2*perCent);
+  elGeEnr->AddIsotope(Ge74,abundance= 13.1*perCent);
+  elGeEnr->AddIsotope(Ge76,abundance= 86.6*perCent);
+   
+  //Define material
+  G4Material* enrGe = new G4Material(name="EnrichedGe", 
+     density=5.35*g/cm3,1);
+  enrGe->AddElement(elGeEnr,natoms=1);
+
+\endverbatim
+
+
+
+*/

@@ -1,0 +1,146 @@
+Login for Windows users -- use putty.exe and connect to :
+
+login.hep.wisc.edu
+
+Login for Mac users :
+
+Use Terminal.app -- in the window type
+
+ssh login.hep.wisc.edu
+
+Upon first login setup the environment and copy the code and build it:
+
+cd ~/Physics535
+source environment.sh
+cp -R ~dasu/Physics535/Exercise01 .
+
+Every time you login, you need to do the following to restore your environment:
+
+cd ~/Physics535
+source environment.sh
+cd Exercise01
+
+Running generateData on hfac-e-250-z.cards to produce hfac-e-250-z.output file:
+
+./generateData hfac-e-250-z.cards > hfac-e-250-z.output
+
+Looking at your data:
+
+Open a browser and go the address, http://www.hep.wisc.edu/~<yourUsername>/Physics535
+
+You will find your Physics535 directory content.  You can click on the files 
+to browse their content.
+
+Editing files for Windows users:
+
+Option 1) Edit the files on your laptop and copy them to the hep.wisc.edu machine using pscp.exe
+Makesure that when you edit the file and save it is in plain text (ASCII) format. 
+Using a simple editor on your PC should work.
+
+http://www.it.cornell.edu/services/managed_servers/howto/file_transfer/fileputty.cfm
+
+Option 2) Learn to use an editor on Unix.  "pico" is a simple editor that you may find 
+easy to use.  You can use your arrow keys to move around in the file.  You can make
+modifications.  You can then use the control-keys to save the file, quit, etc.  It 
+tells you what your options are at the bottom of your window so learning is easy.
+
+Editing files for Mac users:
+
+Option 1) 
+Use scp <username>@login05.hep.wisc.edu:CMSSW_5_3_2/Physics535/Exercise01/<file> .
+In above substitute <username> and <file> relevant for your need.
+
+Option 2)
+
+Same as for Windows users.
+
+Pythia8 Reference:
+
+http://home.thep.lu.se/~torbjorn/pythia81html/Welcome.html
+
+Please use the "Process Selection" on the left to try out various possibilities allowed.
+
+Relevant Standard Model processes are Electroweak, Top and Higgs if you setup an 
+electron-positron or muon collider, as these leptons do not have color interactions.
+
+There are also several Beyond the Standard Model processes available to play with.
+
+
+Core Unix concepts and command line programs that you need:
+
+Your interaction with the unix computer is through your terminal (putty) window.
+
+When you login, the computer sets your working directory to be the folder in
+the computer's file system with your files.  To check your current working
+directory you can use the command:
+
+pwd
+
+You can change your working directory using the command:
+
+cd <directory>
+
+You can double check the effect of that command by using pwd 
+
+You can always travers up and down the filesystem hierarchy using the two "directories"
+ . and ..
+
+The character . stands for current directory
+
+The characters .. stand for the directory just below.  See example below:
+
+-bash-3.2$ pwd
+/afs/hep.wisc.edu/home/dasu/Physics535/Exercise01
+-bash-3.2$ cd ..
+-bash-3.2$ pwd
+/afs/hep.wisc.edu/home/dasu/Physics535
+-bash-3.2$ cd Exercise01
+-bash-3.2$ pwd
+/afs/hep.wisc.edu/home/dasu/Physics535/Exercise01
+-bash-3.2$ 
+
+The key strokes that you type are interpreted by what is called shell.
+
+The commands that you type are executed when you type <return> key.
+
+The shell executes the command (or program) in the environment 
+(printenv to see your environment variables)
+
+The programs can read and write to that window.
+
+In addition you can redirect the output to/from the commands.  
+
+The command 
+./generateData hfac-e-250-z.cards
+
+Runs the program generateData which is located in current directory
+as indicated by .  This program is written to take the name of the
+file with the Pythia configuration information from the command line.
+That is the reason for putting the name of the higgs-z.cards there.
+By putting some other file you can change the cards read by generateData
+
+You can redirect the long output from generateData to a different
+file so that you can browse it at leisure.  To do that you use the command:
+
+./generateData hfac-e-250-z.cards > hfac-e-250-z.output
+
+Copying files:
+
+cp <fileName> <newFileName>
+
+Removing files and empty directories:
+
+rm <file>
+rmdir <directory>
+
+Moving files around or renaming them:
+
+mv <file> <newFileName>
+
+In above <file> and <newFileName> can include directory
+
+Help:
+
+If you need help, please feel free to email me.  You can also find many unix
+and programming tutorials online.  Don't stall -- just try things out is the
+best advise that I can offer.

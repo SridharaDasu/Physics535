@@ -1,0 +1,31 @@
+Setup of Exercise03 is similar to Exercise01 and Exercise02.
+Please follow the prior instructions for that.
+
+Notice that in Exercise03 there are new files UltraFastSim.[cc,h] & EventData.h
+These files take the particles reconstructible by a detector such as CMS
+and smear their momenta and energy such that detector effects are simulated.
+The "reconstructed", aka smeared, particles are available from the UltraFastSim
+class.  An example histogram for RecoPhotonET is added to the EventAnalysis.cc
+
+To Do:
+
+1) Copy, build and run the program to obtain hfac-h.root file
+2) Examine the root file (following Exercise02) and check that RecoPhotonET
+   is properly displayed.
+3) Modify EventAnalysis.cc to find highest energy positively and negatively
+   charged muons (make TLorentzVectors of those), then add them and make the 
+   invariant mass of the combination using the existing method of the 
+   TLorentzVector class.  {PMuMu = PMuPlus+PMuMinus;  invMass = PMuMu.M();}
+4) Notice that the plot has a peak at MZ = 91 GeV
+5) There may not be enough events. I suggest enhancing the peak by requiring
+   that the Z boson decays only to mu+-mu-.  You need to place in the
+   hfac-h.cards the appropriate commands:
+
+   23:onMode = 0       ! Z (23) decays to muons (13) only
+   23:onIfAny = 13
+
+6) Change the mass of the higgs to MH = 125 GeV
+
+   25:m0 = 125
+
+7) Save the mu+mu- invariant mass plot to the file invMass.png

@@ -1,0 +1,192 @@
+// $Id: exerciseField.doxy 118 2010-02-03 15:02:48Z gunter $
+
+/**
+ \mainpage Task 1.c Geant4 Field
+
+\section t1es1 OBJECTIVE
+
+- Define a magnetic field for the tracker
+- Change the field so that it deflects the tracks along the long axis of the silicon strips
+ 
+This involves
+- Defining the field: choose an existing class or create a new class
+- Telling Geant4 about the field: assigning 
+
+\section t1ds2 HOW
+
+The field must be created and set in the DetectorConstruction class.
+
+We chose to have a separate method ConstructField(), which is called by the Construct method, after all the geometry is created.
+
+The field class must always expect position in Global Coordinates, and return the field value in Global Coordinates.
+
+\section t1ds3a PRACTICE
+
+- Examine the detector Construction. 
+Find the method ConstructField()
+
+\subsection  t1bs3asub1 Exercise 1c.1 : Setting a Uniform Field
+Set a Uniform Field of 2.5 tesla in y-direction. 
+
+Revise the ConstructField() method, using the G4UniformMagField class. This will 
+produce a uniform magnetic field in the entire world volume.
+
+See the resulting deflection in tracks. Select muons of 2.0 GeV. 
+\verbatim
+Idle> /gun/particle mu+
+Idle> /gun/energy 2 GeV
+Idle> /run/beamOn 1
+\endverbatim
+
+Change the value of the field, or the sign of the particle charge, and check the change 
+in the curvature of the tracks. 
+
+To get this effect in visualisation, we needed to tell Geant4 to use smooth trajectories.  
+Check the vis.mac file and find the line which creates the trajectories.  Try deleting "smooth" and 
+see what the tracks look like.
+
+
+\subsection  t1bs3asub2 Exercise 1c.2 : Using a Field Class
+
+Goal: Change to use the SimpleField instead of the Uniform field. This allows to specify an 
+arbitrary B(x) map of the magnetic field, passing the spatial coordinates as inputs and 
+getting a 3-vector with the magnetic field.
+
+Edit the DetectorConstruction::ConstructField() method to activate the use of the 
+SimpleField class (i.e. replace G4UniformMagField with SimpleField). 
+Inspect the code of the SimpleField class, noticing its constructor and the
+GetFieldValue() method implementations.
+
+
+\subsection  t1bs3asub3 Exercise 1c.3: (Optional) Add a local magnetic field to a specific volume
+
+Let's try now to add a <i>local</i> magnetic field in the central part of the electromagnetic 
+calorimeter along the z direction. The magnetic field properties are now attached to a G4LogicalVolume, 
+i.e. to
+\verbatim
+G4LogicalVolume* emCentralLogic
+\endverbatim
+A simple way to proceed is to define the field inside the DetectorContruction.cc, where the specific volume is defined. 
+Remember that the field must be passed to the G4LogicalVolume of the volume and that you have to work also in the 
+DetectorConstruction.hh file.
+
+<b>Notice:</b>: Remember to uncomment the correct part in the DetectorConstruction.cc file (Task 1c.3) 
+and to edit the EDITME parts. Also, you have to comment out the entire method DetectorConstruction::ConstructField() 
+and the call to ConstructField() in DetectorConstruction::Construct(). (Look for the string "COMMENT" in the whole 
+DetectorConstruction.cc file)
+
+
+
+
+\section t1ds4 SOLUTION
+
+\subsection  t1bs4asub1 Exercise 1c.1 : Setting a Uniform Field
+Change the src/DetectorConstruction.cc file to:
+\verbatim
+void DetectorConstruction::ConstructField() 
+{
+  static G4TransportationManager* trMgr= 
+    G4TransportationManager::GetTransportationManager(); 
+
+  // A field object is held by a field manager
+  // Find the global Field Manager
+  G4FieldManager* globalFieldMgr= trMgr->GetFieldManager();
+
+  //-------------------------------------------------------------------------
+  // Magnetic field
+  //-------------------------------------------------------------------------
+  static G4bool fieldIsInitialized = false;
+  if(!fieldIsInitialized)
+  {
+      // Only initialise the field once 
+      //   - because there are no parameters to SimpleField
+ 
+      // A) Create the field and set it in the field manager
+      //    ****************
+      G4MagneticField* myField;
+      G4ThreeVector  fieldVector( 0, 2.5*tesla, 0);
+      //  EDITME: change the value of the field vector above
+\endverbatim
+
+
+
+\subsection  t1bs4asub2 Exercise 1c.2 : Using a Field Class
+Change the src/DetectorConstruction.cc file to:
+\verbatim
+void DetectorConstruction::ConstructField() 
+{
+  static G4TransportationManager* trMgr= 
+    G4TransportationManager::GetTransportationManager(); 
+
+  // A field object is held by a field manager
+  // Find the global Field Manager
+  G4FieldManager* globalFieldMgr= trMgr->GetFieldManager();
+
+  static G4bool fieldIsInitialized = false;
+  if(!fieldIsInitialized)
+    {
+      
+	...............
+	..................
+
+      
+      //  Task 1c.2
+      // EDIT the call below to instantiate the 'SimpleFiled' class
+     >>>>>>>>>>> myField = new SimpleField( fieldVector ); 
+
+      globalFieldMgr->SetDetectorField(myField);
+
+
+\endverbatim
+	
+\subsection  t1bs4asub3 Exercise 1c.3 : Add a local magnetic field to a specific volume
+
+Inside the DetectorContruction.cc class file, during the geometrical costruction, you have to firstly construct the
+field:
+\verbatim
+// Field definition	
+  G4TransportationManager* tmanagerMagneticField = G4TransportationManager::GetTransportationManager();
+  tmanagerMagneticField -> GetPropagatorInField() -> SetLargestAcceptableStep(1*mm);
+    
+  emCaloFieldIntensityZ = 2000000 *gauss;
+	
+  magneticField = new G4UniformMagField(G4ThreeVector(emCaloFieldIntensityZ, 0.0, 0.0));
+  fEquationMagneticField = new G4Mag_UsualEqRhs(magneticField);																			 
+  minStepMagneticField     = 0.0025 *mm ;
+  G4FieldManager* fieldManagerMagneticField = new G4FieldManager(magneticField);
+    
+  stepperMagneticField = new G4ClassicalRK4( fEquationMagneticField ); 
+  fieldManagerMagneticField -> SetDetectorField(magneticField);
+	
+  fChordFinder = new G4ChordFinder( magneticField, minStepMagneticField, stepperMagneticField);	
+
+\endverbatim
+
+Then, the field but be assigned to the desired volume:
+
+\verbatim
+ emCentralLogic -> SetFieldManager( fieldManagerMagneticField, true ) ;
+\endverbatim
+
+The DetectorConstruction.hh header file must be modified as well:
+\verbatim
+private:
+
+  // >>>>>>>> Task 1c.3 <<<<<<<<<
+  // Visualisation attribute
+  G4VisAttributes* red;
+
+  //
+  G4double emCaloFieldIntensityZ;
+
+  G4UniformMagField* magneticField;
+  G4Mag_UsualEqRhs *fEquationMagneticField;
+  G4double minStepMagneticField;
+  G4MagIntegratorStepper* stepperMagneticField;
+  G4ChordFinder*          fChordFinder;
+
+\endverbatim
+
+
+
+*/

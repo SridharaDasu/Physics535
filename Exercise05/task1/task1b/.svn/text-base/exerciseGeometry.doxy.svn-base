@@ -1,0 +1,225 @@
+// $Id: exerciseSensitive.doxy 118 2010-02-03 15:02:48Z gunter $
+
+/**
+ \mainpage Task 1.b Geant4 Geometry: solids and placements
+
+\section t1bs1 OBJECTIVE
+
+Learn how to:
+ - create a solid 
+ - create a logical volume 
+ - place several instances in the mother volume.
+ 
+The geometrical set-up of this exercise is similar to the one of Task1a except that it is completed with an additional hadronic calorimeter.
+
+\section t1bs2 HOW
+
+The exercise consists in adding to the setup a Hadronic calorimeter. The HAD Calo is a sampling calorimeter made of Fe and LAr (liquid argon) layers.
+
+DetectorConstruction::DefineMaterials() already contains the definition of the needed materials. DetectorConstruction::ComputeParameters() defines the parameters (position, dimensions) of the calorimeter.
+
+The HAD calo is built out of 80 layers along Z axis (it's like a huge wafer of Fe/LAr layers), each layer is made of 20mm of Fe followed by 8mm of LAr. The HAD calo is a cylinder of 80cm radius, the dimensions of the calorimeter are such that it is 10 interaction lengths wide and long.
+
+\section t1bs3 PRACTICE
+The code is contained in task1b directory. 
+You will have to modify the DetectorConstruction::ConstructHadCalo() method contained in the file src/DetectorConstrucion.cc
+
+\subsection t1bs3sub1 Exercise 1b.1 : Create a solid of a simple geometric configuration
+
+As initial exercise we create a simple geometric configuration: 
+Construct a box with name "simpleBox" and half lengths pX,pY,pZ respectively 20*mm,20*mm,20*mm (G4Box).
+\verbatim
+G4Box* simpleBox = G4Box(const G4String& pName, G4double pX, G4double pY, G4double pZ);
+\endverbatim
+Look at DetectorConstruction::ConstructBox() method and enter the command. 
+
+\subsection t1bs3sub2 Exercise 1b.2 : Create the logical volum of a simple geometric configuration
+
+So, using the box created above,you can create a simple logical volume named "SimpleBoxLogic",filled with iron "fe" (see materials) by entering in DetectorConstruction::ConstructBox() method :
+\verbatim
+G4LogicalVolume* SimpleBoxLogic =G4LogicalVolume(G4VSolid* its_solid ,G4Material* its_material,const G4String& its_name);
+\endverbatim
+Assigned the magenta color (1.0, 0.0, 1.0,1) to the volume (G4Colour).
+\verbatim
+ SimpleBoxLogic->SetVisAttributes(new G4VisAttributes(color_name));
+\endverbatim
+
+\subsection t1bs3sub3 Exercise 1b.3 : Create placements of a simple geometric configuration
+
+Now we represent the logical volume within a volume mother, in our case the mother logical volume is the "logicWorld" by entering in DetectorConstruction::ConstructBox() method. for positioning enter the following parameters: no rotation (0),its traslation (posSimpleBox),
+lits ogical volume (SimpleBoxLogic), its name (SimpleBoxPl), its mother volume logicWorld, copy number(10),no boolean operation.
+
+Find in the DetectorConstruction::ComputeParameters() method, posSimpleBox value and try changing it for understand how the volume changes it position
+\verbatim
+SimpleBoxPl = new G4PVPlacement(G4RotationMatrix *pRot,
+			      const G4ThreeVector &tlate,
+			      G4LogicalVolume *pCurrentLogicalSimpleBoxLogic,
+			      const G4String& pName,
+			      G4LogicalVolume *pMotherLogical,
+			      G4bool pSurfChk=false,
+			      G4int  pCopyNo); 
+\endverbatim
+
+You could try to compile the code and run it to see the newly created volume.
+
+\subsection t1bs3sub4 Exercise 1b.4 : Create the solid of a more complicated volume
+
+We need first to create the solid associated to each one of the layers of liquid argon: a cylinder (G4Tubs).
+
+Look at DetectorConstruction::ConstructHadCalo() method and search where the layer solid is created.
+You will have to edit these lines inserting the correct dimensions of the G4Tubs.
+You will have to modify the following lines:
+\verbatim
+G4Tubs* hadLayerSolid = new G4Tubs( "HadCaloLayerSolid", //its name
+                                     EDITME:innerradius ,
+                                     EDITME:outerradius ,
+	                             EDITME:length,
+	                             EDITME:start_angle,
+	                             EDITME:end_angle);    
+\endverbatim
+Change the EDITME:bla-bla with the correct values
+
+Hint 1: Look at the hadCaloSolid to see the radius and angles.
+
+Hint 2: Be careful: length (dimension of a layer) should be expressed as semi-dimension along z-axis: hadCaloLArThickness/2. The dimension of a LAr layer is defined by hadCaloLArThickness variable.
+
+\subsection t1bs3sub5 Exercise 1b.5 : Create the logical volume
+
+We need now to create the logical volume associated to the layer of active material.
+A logical volume needs to know the solid (its shape), the material that is made of and it has also a name.
+Look few lines below the solid you have created and modify the code to create the logical volume
+\verbatim
+G4LogicalVolume* hadLayerLogic = new G4LogicalVolume(EDITME:solid_pointer,
+                                                     EDITME:material,
+                                                     "HadLayerLogic");//its name
+\endverbatim
+
+Hint 1: solid_pointer must be a valid pointer to a solid (shape), you have to use the cylinder (G4Tubs) in previous exercise
+
+Hint 2: material must be a valid pointer to a defined material. Look at DetectorConstruction::DefineMaterials() to find what is the name of the liquid argon material.
+
+\subsection t1bs3sub6 Exercise 1b.6 : Create placements
+
+We need now to place in the HAD calo volume many "copies" of the liquid argon layer. We do it with a for-loop making several placements.
+Remember: a placement is the positioning of a logic volume into a "mother" logical volume. In our case the mother logical volume is the HAD calo logic. When placing a logical volume in the its mother the coordinate system is relative to the mother volume. The origin of coordinates is the center of the mother volume.
+ 
+ * What is the name of the variable representing the logic volume of the entire calorimeter?
+ 
+The placement is inside a for-loop: the index of the loop is used to calculate the position of the layer in the mother volume.
+
+ * Do you understand how the position is calculated?
+
+Fill in the missing parts of the creation of the placement, change the EDITME parts.
+\verbatim
+new G4PVPlacement(EDITME:rotation,
+		  position, //position, do not change this, already done for you
+		  EDITME:logical_volume,
+		  "HadCaloLayer",//a name
+		  EDITME:mother_logical_volume,
+		  false, //leave this like this: not used
+		  ++layerCopyNum);//The unique number, it will be 1001+layerIndex
+\endverbatim
+
+Hint 1: rotation is a pointer to a rotation matrix. If you do not need a rotation, you should pass a NULL pointer (i.e. 0). See other placements as example.
+
+Hint 2: the logical volume is the one you have created in previous exercise.
+
+\subsection t1bs3sub7 Exercise 1b.7 : Compile and test
+
+To run and compile the application:
+\verbatim
+        % mkdir task1b-build
+        % cd task1b-build
+	% source /usr/local/geant4.9.6/geant4.9.6-install/bin/geant4.sh
+        % cmake -DGeant4_DIR=/usr/local/geant4.9.6/geant4.9.6-install/lib/Geant4-9.6.0 [task1b_directory]
+	% make
+	%./task1b	
+\endverbatim
+
+Check that the new hadronic calorimeter is created. Re-read the code you modified, be sure that you have understood all the different steps involved in the task.
+
+
+\section t1bs4 SOLUTION
+This is the complete solution of the exercise.
+\verbatim
+
+// A simple geometric configuration
+G4VPhysicalVolume* DetectorConstruction::ConstructBox()
+
+{
+  G4Box* simpleBox = new G4Box("simpleBox",20*mm,20*mm,20*mm);
+  G4Colour  magenta (1.0, 0.0, 1.0,1);
+  
+  G4LogicalVolume* SimpleBoxLogic = new G4LogicalVolume( simpleBox,//its solid
+						  fe, //its material
+						  "SimpleBoxLogic");//its name
+  SimpleBoxLogic->SetVisAttributes(new G4VisAttributes(magenta));
+  
+   SimpleBoxPl=new G4PVPlacement(0, //no rotation
+			     posSimpleBox,//translation
+			     SimpleBoxLogic, //its logical volume
+			     "SimpleBoxPl",//its name
+			     logicWorld,//its mother volume
+			     false, //no boolean operation
+			     10); //copy number
+
+return SimpleBoxPl;
+}
+
+
+G4VPhysicalVolume* DetectorConstruction::ConstructHadCalo()
+{
+	G4double halfHadCaloHalfZ = (hadCaloFeThickness+hadCaloLArThickness)*hadCaloNumLayers/2;
+	G4Tubs* hadCaloSolid = new G4Tubs( "hadCaloSolid",//its name
+ 					0, //inner radius
+					hadCaloRadius,//outer radius
+					halfHadCaloHalfZ, //half length in z: number of layers
+					0, //Starting angle in phi
+					CLHEP::twopi);//Ending angle in phi, pi defined in
+	G4LogicalVolume* hadCaloLogic = new G4LogicalVolume( hadCaloSolid,//its solid
+		                         		     fe,//its material
+							     "HadCaloLogic");//its name
+	G4int hadCaloCopyNum = 1000;
+	hadCalo = new G4PVPlacement( 0, //no rotation
+				     posHadCalo, //translation
+				     hadCaloLogic,//its logical volume
+				     "HadCalo",//its name
+				     logicWorld,//its mother volume
+				     false,
+			  	     hadCaloCopyNum);//copy number
+
+	
+
+	//We now make layers of LAr and add them to the hadronic calo logic
+	G4Tubs* hadLayerSolid = new G4Tubs( "HadCaloLayerSolid", 
+			      	    	    	0, 
+						hadCaloRadius, 
+						hadCaloLArThickness/2, 
+						0, 
+						CLHEP::twopi);
+
+	G4LogicalVolume* hadLayerLogic = new G4LogicalVolume(hadLayerSolid,
+								lar,
+								"HadLayerLogic");
+
+	//Translation of one Layer with respect previous Layer
+	G4ThreeVector absorberLayer(0,0,hadCaloFeThickness);
+	G4ThreeVector activeLayer(0,0,hadCaloLArThickness);
+	G4int layerCopyNum = hadCaloCopyNum;
+	for ( int layerIdx = 0 ; layerIdx < hadCaloNumLayers ; ++layerIdx )
+	{
+		G4ThreeVector position = (layerIdx+1)*absorberLayer + (layerIdx+0.5)*activeLayer;
+		position -= G4ThreeVector(0,0,halfHadCaloHalfZ);//Position is w.r.t. center of mother volume: the hadCaloLogic
+		new G4PVPlacement(0,position,hadLayerLogic,"HadCaloLayer",hadCaloLogic,false,++layerCopyNum);
+	}
+	G4Colour green(0,1,0);
+	G4Colour white(1,1,1);
+	hadCaloLogic->SetVisAttributes(new G4VisAttributes(green));
+	hadLayerLogic->SetVisAttributes(new G4VisAttributes(white));
+	//hadLayerLogic->SetVisAttributes(G4VisAttributes::Invisible);
+	return hadCalo;
+}
+\endverbatim
+
+
+*/
