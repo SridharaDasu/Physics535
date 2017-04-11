@@ -9,6 +9,7 @@ git clone https://github.com/SridharaDasu/Physics535.git
 Everytime you login:
 
 cd ~/Physics535
+
 source environment.sh
 
 Then look at README file for further instructions
