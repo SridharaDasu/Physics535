@@ -4,6 +4,8 @@ ssh login.hep.wisc.edu
 
 Commands to issue after first login:
 
+git clone https://github.com/SridharaDasu/Physics535.git
+
 Everytime you login:
 
 cd ~/Physics535
