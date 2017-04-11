@@ -5,6 +5,10 @@
 *.pyc
 *.dSYM
 *.root
+*.png
+*.output
+*.out
+\#*
 generateData
 analyzeData
 a.out

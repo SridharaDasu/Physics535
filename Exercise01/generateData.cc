@@ -3,7 +3,7 @@
 using namespace std;
 #include <math.h>
 
-#include "Pythia.h"
+#include "Pythia8/Pythia.h"
 using namespace Pythia8; 
 
 int main(int argc, char **argv) {
@@ -24,12 +24,12 @@ int main(int argc, char **argv) {
   if(argc == 3) runNumber = atoi(argv[2]);
 
   int nEvents = pythia.mode("Main:numberOfEvents");
-  int    nList     = pythia.mode("Main:numberToList");
-  int    nShow     = pythia.mode("Main:timesToShow");
+  int    nList     = 100;
+  int    nShow     = 20;
   int    nAbort    = pythia.mode("Main:timesAllowErrors");
-  bool   showCS    = pythia.flag("Main:showChangedSettings");
+  bool   showCS    = true;
   bool   showAS    = pythia.flag("Main:showAllSettings");
-  bool   showCPD   = pythia.flag("Main:showChangedParticleData");
+  bool   showCPD   = true;
   bool   showAPD   = pythia.flag("Main:showAllParticleData");
 
   // Initialize pythia
@@ -67,7 +67,7 @@ int main(int argc, char **argv) {
 
   // Save output
 
-  pythia.statistics();
+  pythia.stat();
 
   return 0;
 

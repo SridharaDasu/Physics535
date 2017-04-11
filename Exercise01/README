@@ -8,17 +8,15 @@ Use Terminal.app -- in the window type
 
 ssh login.hep.wisc.edu
 
-Upon first login setup the environment and copy the code and build it:
-
-cd ~/Physics535
-source environment.sh
-cp -R ~dasu/Physics535/Exercise01 .
-
 Every time you login, you need to do the following to restore your environment:
 
 cd ~/Physics535
 source environment.sh
 cd Exercise01
+
+To build the program type:
+
+make
 
 Running generateData on hfac-e-250-z.cards to produce hfac-e-250-z.output file:
 

@@ -6,13 +6,7 @@
 
 ! 1) Settings that could be used in a main program, if desired.
 Main:numberOfEvents = 100         ! number of events to generate
-Main:numberToList = 100              ! number of events to print
-Main:timesToShow = 20              ! show how far along run is this many times
 Main:timesAllowErrors = 10         ! abort run after this many flawed events
-Main:showChangedSettings = on      ! print changed flags/modes/parameters
-#Main:showAllSettings = on          ! print all flags/modes/parameters
-Main:showChangedParticleData = on  ! print changed particle and decay data
-#Main:showAllParticleData = on      ! print all particle and decay data
 
 ! 2) Beam parameter settings. Values below agree with default ones.
 Beams:idA = 11                     ! first beam, electron = 11
