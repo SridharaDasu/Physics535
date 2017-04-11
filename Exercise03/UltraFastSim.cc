@@ -1,7 +1,7 @@
 #include "UltraFastSim.h"
 
-#include "Event.h"
-#include "Analysis.h"
+#include "Pythia8/Event.h"
+#include "Pythia8/Analysis.h"
 
 #include "TParticle.h"
 #include "TLorentzVector.h"

@@ -5,7 +5,7 @@ using namespace std;
 #include <string>
 #include <map>
 
-#include "Pythia.h"
+#include "Pythia8/Pythia.h"
 using namespace Pythia8; 
 
 #include "TH1F.h"

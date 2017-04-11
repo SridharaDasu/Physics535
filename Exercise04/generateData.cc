@@ -3,7 +3,7 @@
 using namespace std;
 #include <math.h>
 
-#include "Pythia.h"
+#include "Pythia8/Pythia.h"
 using namespace Pythia8; 
 
 #include "UltraFastSim.h"
@@ -48,13 +48,13 @@ int main(int argc, char **argv) {
   if(argc == 3) runNumber = atoi(argv[2]);
 
   int nEvents = pythia.mode("Main:numberOfEvents");
-  int    nList     = pythia.mode("Main:numberToList");
-  int    nShow     = pythia.mode("Main:timesToShow");
+  int    nList     = 1;
+  int    nShow     = 1;
   int    nAbort    = pythia.mode("Main:timesAllowErrors");
-  bool   showCS    = pythia.flag("Main:showChangedSettings");
-  bool   showAS    = pythia.flag("Main:showAllSettings");
-  bool   showCPD   = pythia.flag("Main:showChangedParticleData");
-  bool   showAPD   = pythia.flag("Main:showAllParticleData");
+  bool   showCS    = true;
+  bool   showAS    = true;
+  bool   showCPD   = true;
+  bool   showAPD   = true;
 
   // Initialize pythia
 
@@ -79,11 +79,17 @@ int main(int argc, char **argv) {
 
   Pythia *pileupPythia;
   int meanPileupEventCount = 25;
-  if(beamA == 2212) {
+  if(beamA == 2212 && beamB == 2212) {
     pileupPythia = new Pythia();
-    pileupPythia->readString("SoftQCD:minBias = on");
+    // Use beamA = beamB = 2212 and cmEnergy = Hard Interaction cmEnergy
+    pileupPythia->readString("SoftQCD:all = on");
     cout << "beam A, B, s" << beamA << ", " << beamB << ", " << cmEnergy << endl;
-    pileupPythia->init(beamA, beamB, cmEnergy);
+    pileupPythia->readString("Beams:idA = 2212");
+    pileupPythia->readString("Beams:idB = 2212");
+    std::stringstream ss;
+    ss << "Beams:eCM = " << cmEnergy;
+    pileupPythia->readString(ss.str());
+    pileupPythia->init();
     pileupPythia->rndm.init(runNumber);
   }
 
@@ -162,7 +168,7 @@ int main(int argc, char **argv) {
 
   // Save output
 
-  pythia.statistics();
+  pythia.stat();
   eventAnalysis.finalize();
 
   return 0;
