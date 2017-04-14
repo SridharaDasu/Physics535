@@ -59,4 +59,9 @@ Everytime you login:
     
     source environment.sh
 
+You can use Linux tools to browse / edit files (Emacs and Kate) which
+are accessible from the Applications/Accessories menu.  You can use
+other applications as well.  If there are troubles accessing some
+application or the other please email help@hep.wisc.edu.
+
 Then look at README files in individual exercise directories for further instructions

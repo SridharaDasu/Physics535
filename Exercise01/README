@@ -1,18 +1,8 @@
-Login for Windows users -- use putty.exe and connect to :
-
-login.hep.wisc.edu
-
-Login for Mac users :
-
-Use Terminal.app -- in the window type
-
-ssh login.hep.wisc.edu
-
 Every time you login, you need to do the following to restore your environment:
 
 cd ~/Physics535
 source environment.sh
-cd Exercise01
+cd Exercise02
 
 To build the program type:
 
@@ -24,33 +14,12 @@ Running generateData on hfac-e-250-z.cards to produce hfac-e-250-z.output file:
 
 Looking at your data:
 
-Open a browser and go the address, http://www.hep.wisc.edu/~<yourUsername>/Physics535
+Use Applications/System Tools/File Browser to open a file browser.
+You should be able to double click or control-click and chose
+applications.  Emacs and Kate are suitable ASCII file editor/browsers.
 
-You will find your Physics535 directory content.  You can click on the files 
-to browse their content.
-
-Editing files for Windows users:
-
-Option 1) Edit the files on your laptop and copy them to the hep.wisc.edu machine using pscp.exe
-Makesure that when you edit the file and save it is in plain text (ASCII) format. 
-Using a simple editor on your PC should work.
-
-http://www.it.cornell.edu/services/managed_servers/howto/file_transfer/fileputty.cfm
-
-Option 2) Learn to use an editor on Unix.  "pico" is a simple editor that you may find 
-easy to use.  You can use your arrow keys to move around in the file.  You can make
-modifications.  You can then use the control-keys to save the file, quit, etc.  It 
-tells you what your options are at the bottom of your window so learning is easy.
-
-Editing files for Mac users:
-
-Option 1) 
-Use scp <username>@login05.hep.wisc.edu:CMSSW_5_3_2/Physics535/Exercise01/<file> .
-In above substitute <username> and <file> relevant for your need.
-
-Option 2)
-
-Same as for Windows users.
+Web browser is also available, but you should probably run it natively
+on your laptop for speed.
 
 Pythia8 Reference:
 
