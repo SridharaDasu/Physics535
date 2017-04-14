@@ -1,6 +1,6 @@
-  
-  
-  Your first step is to set up access to login.hep.wisc.edu conveniently. 
+Instructions for the use of Physics535 Exercises
+
+   Your first step is to set up access to login.hep.wisc.edu conveniently. 
    We will use VNC to port linux desktop of login.hep.wisc.edu to your laptop 
    
    You will need to start VNC on the login.hep.wisc.edu. To do that:
