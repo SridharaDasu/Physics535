@@ -1,32 +1,42 @@
 /*
 
-   Your first step is to get access to ROOT program 
-   You have three options:
-     1) Use ROOT on your computer
-        You can download from http://root.cern.ch
-        On Mac you will need to use XQuartz and xterm
-        On Windows you do not need X-Windows
-        Use documentation at above Website for usage instructions
-        
-     2) Use linux machines at login.hep.wisc.edu with remote access
-        For ROOT to work correctly, you need X-Windows client
-        There are free X-Windows clients for Mac and Windows
-        I use XQuartz on my Mac
-        Command line access to ROOT on login machines will be available
-        after running "source environment.sh" -- 
-        Get environment.sh from Learn@UW content page
-        Disadvantage of this is that X-Windows is a bit slow on WAN
-  
-     3) Use linux machines in any HEP office in Chamberlin
-        You need to "source environment.sh"
-        Get environment.sh from Learn@UW content page
-        You do not need to install anything
-        Disadvantage is that you have to hang in the department!
-  
-   Get to root prompt in the directory with your DDecayKinematics.C
+   Your first step is to set up access to login.hep.wisc.edu conveniently. 
+   We will use VNC to port linux desktop of login.hep.wisc.edu to your laptop 
+   
+   You will need to start VNC on the login.hep.wisc.edu. To do that:
+        Open a Terminal emulator window on your laptop 
+	(you can use putty on a Windows laptop or Terminal.app on a Mac laptop)
+              ssh login.hep.wisc.edu
+	Note that login.hep.wisc.edu is a pseudonym for several machines - you will
+	be logged in to one of login01, login02, ... login06
+	After logging in with your HEP password type:
+	      vncserver -geometry 1200x800
+	The 1200x800 is the screen size in pixel units and can be adjusted to suit your laptop
+	The first time you issue the above command, it will prompt for a password twice.
+	Use a simple password as it is not super-secure.  You need that to connect to the server.
+	The program prints out the name of the machine and number for the display.
+	In my case it printed:  login02.hep.wisc.edu and 1
+	You can then close the terminal window.  The server can remain active for extended
+	period of time across your work sessions.  If there is ever a problem, feel free to
+	ssh login02.hep.wisc.edu and then kill the server : vncserver -kill :1
+        You can tehn restart it as above.  It is important to go to your specific server
+	
+   You will need a VNC client on your laptop.
+   
+        On a Mac laptop, I use Chicken : 
+        On Windows laptop, I recommend TightVNC :
 
-   This function can be called from the root prompt using command:
-   .X DDecayKinematics()
+   Open up your VNC client program and use server name, display number and password you set above.
+   Once connected you should see the login.hep.wisc.edu linux desktop.
+
+   Use the linux Gnome desktop enviornment menu that is displayed: Applications/System Tools/Terminal
+   to open a terminal window.  In there you can do:
+        cd ~/Physics535
+        source environment.sh
+	cd Exercise00
+	root 
+	root prompt> .X DDecayKinematics()
+
    Try it out right away, and you will get three plots
 
    Your job is to add code to DDecayKinematics.C which simulates 
