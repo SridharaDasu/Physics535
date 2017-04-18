@@ -45,6 +45,14 @@ Once connected you should see the login.hep.wisc.edu linux desktop.
 Use the linux Gnome desktop enviornment menu that is displayed: Applications/System Tools/Terminal
 to open a terminal window, where you will do most of your work.
 
+Here are some tutorials for you in case you are not quite familiar with Unix command line:
+
+https://www.codecademy.com/learn/learn-the-command-line
+
+http://www.tutorialspoint.com/unix/
+
+http://cli.learncodethehardway.org/book/
+
 Commands to issue after first login:
 
     git clone https://github.com/SridharaDasu/Physics535.git
