@@ -24,8 +24,13 @@ To Do:
    23:onMode = 0       ! Z (23) decays to muons (13) only
    23:onIfAny = 13
 
-6) Change the mass of the higgs to MH = 125 GeV
+6) Save the mu+mu- invariant mass plot to the file invMass.png
+
+7) Change the mass of the higgs to MH = 125 GeV
 
    25:m0 = 125
 
-7) Save the mu+mu- invariant mass plot to the file invMass.png
+   This is just for fun.  If you have time, go change the production 
+   mechanism to Higgs production and make Higgs to diphoton spectrum.
+   Note that you will have to force the Higgs to decay to two photons.
+

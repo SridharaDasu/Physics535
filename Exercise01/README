@@ -2,7 +2,7 @@ Every time you login, you need to do the following to restore your environment:
 
 cd ~/Physics535
 source environment.sh
-cd Exercise02
+cd Exercise01
 
 To build the program type:
 
